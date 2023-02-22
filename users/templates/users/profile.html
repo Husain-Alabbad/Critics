@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags%}
+{% block content %}
+
+<br>
+<div class="row">
+    <div class="col-md-3 offset-md-3"></div>
+    <div class="col-md-3 offset-md-3"><button type="button" class="btn btn-secondary"><a style="color: white;" href="{% url 'home' %}"> Home</a></button></div>
+  </div>
+  <br>
+<h1 id="mcenter">{{ user.username }}</h1>
+<h5 id="mcenter">{{ user.email }}</h5>
+
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div id="flcon">
+                <div>
+                    <p>First Name : {{ user.profile.first_name }}</p>
+                    <p>Last Name: {{ user.profile.last_name }}</p>
+                    <p>Gender: {{ user.profile.gender }}</p>
+                    <p>Contact Number : {{ user.profile.contact_number }}</p>
+                    <p>Date of Birth : {{ user.profile.dob }}</p>
+                    <p>Favorite TV Show : {{ user.profile.favorite_tv_show }}</p>
+                    <p>Favorite Novel : {{ user.profile.favorite_novel }}</p>
+                    <p>Favorite Game : {{ user.profile.favorite_game }}</p>
+                    
+
+
+                </div>
+                <div>
+
+        {% load static %}
+        <img
+          width="200px"
+          height="300px"
+          src="{% static user.profile.image|cut:'main_app/static/' %}"
+        />
+      </div>
+    </div>
+  
+    <br />
+
+    <br />
+
+  </div>
+  <br><br><br>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        <legend class="mcenter border-bottom mb4">Profile Update</legend>
+        {{ form|crispy }}
+
+    </fieldset>
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+</div>
+
+
+{% endblock %}

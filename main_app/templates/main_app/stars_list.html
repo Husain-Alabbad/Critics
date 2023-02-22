@@ -1,0 +1,83 @@
+
+{% extends 'base.html' %} 
+
+{% block content %}
+{% load static %} 
+<div class="row">
+  <div class="col-md-3 offset-md-3"></div>
+  <div class="col-md-3 offset-md-3"><button type="button" class="btn btn-secondary"><a style="color: white;" href="create/">add Star</a></button></div>
+</div>
+<h1 style="text-align:center">Stars List</h1>
+
+<section id="team" class="team section-bg">
+<div class="container" data-aos="fade-up">
+<div class="row">
+{% for star in page_obj %}
+<div
+        class="col-lg-3 col-md-6 d-flex align-items-stretch"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+      <a href="{% url 'stars_detail' star.id %}" class="btn btn-primary" id="show_detail">
+        <div class="member">
+          <div class="member-img">
+            <img src="{% static star.image|cut:'main_app/static/' %}" class="img-fluid" alt=""/>
+          </div>
+          
+          <div class="member-info">
+            <h4>{{ star.name }}</h4>
+            <span> {{ star.get_nationality_display }}</span>
+          </div>
+          <div class="card-action">
+          
+          </div>
+        </div></a>
+      </div>
+
+      {% endfor %}
+      <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    </div>
+</div>
+</section>
+<!-- <section>
+  {% for star in page_obj  %}
+    {# Each "contact" is a Contact model object. #}
+    {{ star.name|upper }}<br>
+    ...
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+</section> -->
+{% endblock %}

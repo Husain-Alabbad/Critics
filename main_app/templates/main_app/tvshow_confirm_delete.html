@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h1> Delete TV Show </h1>
+
+<br><br>
+
+<h4> Are you sure you want to delete <span class="teal-text">{{ object.title }}</span>?</h4>
+
+<br><br>
+
+<form action="" method="POST" >
+    {% csrf_token %}
+    <input type="submit" value="Yes - Delete!" class="btn btn-primary ">
+    <a href="{% url 'tvshows_detail' object.id %}" class="btn btn-primary px-5 py-2">Cancel</a>
+</form>
+
+{% endblock %}

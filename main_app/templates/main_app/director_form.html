@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+{% block content %}  
+{% if object %}
+<h1>Edit <span class="teal-text"> {{ object.name }}</span></h1>
+{% else %}
+<h1>Add Director</h1>
+{% endif %}
+
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+    {% load static %}
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="save" class="btn btn-primary" />
+</form>
+
+<script>
+  let dateEl = document.getElementById("id_dob");
+  M.Datepicker.init(dateEl, {
+    format: "yyyy-mm-dd",
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true,
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% block content %}
+<br />
+<h1 id="mcenter">{{ novel.title }}</h1>
+<div class="row">
+  <div class="col-md-3 offset-md-3"></div>
+  <div class="col-md-3 offset-md-3">
+    <button type="button" class="btn btn-secondary">
+      <a style="color: white" href="{% url 'novels_index' %}"
+        >go back to novel list</a
+      >
+    </button>
+  </div>
+</div>
+<div class="container" data-aos="fade-up">
+  <div class="row">
+    <div id="flcon">
+      <div>
+        <p>Subtitle: {{ novel.sub_title }}</p>
+        <p>Published Date: {{ novel.published_date }}</p>
+        <p>Publisher: {{ novel.publisher }}</p>
+        <p>Pages : {{ novel.pages }}</p>
+      </div>
+      <div>
+        {% load static %}
+        <img
+          width="auto"
+          height="350px"
+          src="{% static novel.image|cut:'main_app/static/' %}"
+        />
+      </div>
+    </div>
+    <div class="card-action">
+      <a class="btn btn-primary" href="{% url 'novels_update' novel.id %}"
+        >Edit</a
+      >
+      <a class="btn btn-primary" href="{% url 'novels_delete' novel.id %}"
+        >Delete</a
+      >
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div>
+      <h4>Have an opinion about this Novel? Please review!</h4>
+      <form action="{% url 'add_review_novel' novel.id '2' %}" method="post">
+        {% csrf_token %} {{ review_form.as_p }}
+        <input type="submit" value="Add Review" class="btn btn-primary" />
+      </form>
+
+      <br />
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Rating(out of 5)</th>
+            <th>Reviews</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for review in all_reviews %} 
+          {% if review.reference_id == novel.id and review.category_id == "2" %}
+          <tr>
+            <td>{{ review.rating }}</td>
+            <td>{{ review.review }}</td>
+          </tr>
+          {% endif %} {% endfor %}
+          <div class="pagination">
+            <span class="step-links">
+              {% if all_reviews.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ all_reviews.number }} of {{all_reviews.paginator.num_pages }}.
+              </span>
+
+              {% if all_reviews.has_next %}
+              <a href="?page={{ all_reviews.next_page_number }}">next</a>
+              <a href="?page={{ all_reviews.paginator.num_pages }}"
+                >last &raquo;</a
+              >
+              {% endif %}
+            </span>
+          </div>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+  </div>
+</div>
+
+{% endblock %}

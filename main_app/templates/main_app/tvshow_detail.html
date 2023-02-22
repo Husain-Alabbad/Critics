@@ -1,0 +1,109 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3 offset-md-3"></div>
+  <div class="col-md-3 offset-md-3">
+    <button type="button" class="btn btn-secondary">
+      <a style="color: white" href="{% url 'tvshows_index' %}"
+        >go back to TV Show list</a
+      >
+    </button>
+  </div>
+</div>
+<h1 style="text-align:center">{{ tvshow.title }}</h1>
+
+    <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div id="flcon">
+                <div>
+                    
+                    <p class="show">Show Category: {{ tvshow.type }}</p>
+                    <p>Duration: {{ tvshow.duration }}</p>
+                    <p>Genre: {{ tvshow.genre }}</p>
+                    <p>Release Date: {{ tvshow.releaseDate }}</p>
+                    <p>Director: {{ tvshow.director }}</p>
+                    <p>Novel: {{ tvshow.novel }}</p>
+                    <p>Game: {{ tvshow.game }}</p>
+                    
+                    <ul> Stars: {% for star in tvshow.stars.all %} 
+                      <li>{{ star.name }}</li>{% endfor %}
+                    </ul>
+                      
+
+                </div>
+                <div>
+                    {% load static %}
+                    <img width="300px" height="300px" src="{% static tvshow.image|cut:'main_app/static/' %}" />
+                </div>
+            </div>
+            <div class="card-action">
+            <a class="btn btn-primary" href="{% url 'tvshows_update' tvshow.id %}">Edit</a>
+            <a class="btn btn-primary" href="{% url 'tvshows_delete' tvshow.id %}">Delete</a>
+            </div>
+            <hr>
+            <!--  -->
+
+            <!--  -->
+            <br />
+            <hr />
+            <br />
+            <div>
+              <h4>Have an opinion about this TV Show? Please review!</h4>
+              <form action="{% url 'add_review_tvshow' tvshow.id '1' %}" method="post">
+                {% csrf_token %} {{ review_form.as_p }}
+                <input type="submit" value="Add Review" class="btn btn-primary" />
+              </form>
+        
+              <br />
+        
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Rating(out of 5)</th>
+                    <th>Reviews</th>
+                  </tr>
+                </thead>
+        
+                <tbody>
+                  {% for review in all_reviews %} 
+                  {% if review.reference_id == tvshow.id and review.category_id == "1" %}
+                  <tr>
+                    <td>{{ review.rating }}</td>
+                    <td>{{ review.review }}</td>
+                  </tr>
+                  {% endif %} {% endfor %}
+                  <div class="pagination">
+                    <span class="step-links">
+                      {% if all_reviews.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                      {% endif %}
+        
+                      <span class="current">
+                        Page {{ all_reviews.number }} of 
+                        {{ all_reviews.paginator.num_pages }}.
+                      </span>
+        
+                      {% if all_reviews.has_next %}
+                      <a href="?page={{ all_reviews.next_page_number }}">next</a>
+                      <a href="?page={{ all_reviews.paginator.num_pages }}"
+                        >last &raquo;</a
+                      >
+                      {% endif %}
+                    </span>
+                  </div>
+                </tbody>
+              </table>
+            </div>
+        
+            <hr />
+        </div>
+    </div>
+    
+   
+
+
+
+{% endblock %}

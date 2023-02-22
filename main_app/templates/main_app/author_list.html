@@ -1,0 +1,63 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+{% load static %} 
+<br><br>
+<div class="row">
+  <div class="col-md-3 offset-md-3"></div>
+  <div class="col-md-3 offset-md-3"><button type="button" class="btn btn-secondary"><a style="color: white;" href="create/">add author</a></button></div>
+</div>
+<h1 id="mcenter">Authors</h1>
+
+
+<section id="team" class="team section-bg">
+<div class="container" data-aos="fade-up">
+<div class="row">
+{% for author in author_list reversed %}
+<div
+        class="col-lg-3 col-md-6 d-flex align-items-strech"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <div class="member">
+          <a href="{% url 'authors_detail' author.id %}">
+          <div class="member-img">
+            <img id="gimg"
+              src="{% static author.image|cut:'main_app/static/' %}"
+              class="img-fluid"
+              alt="" 
+            />
+          
+          </div>
+          
+          <div class="member-info" id="ttll">
+            <h4>{{ author.name }}</h4>
+            <span>{{ author.get_gender_display }}</span>
+            <span>{{ author.get_nationality_display }}</span>
+          </div>
+        </a>
+        </div>
+      </div>
+
+      {% endfor %} 
+      <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    </div>
+</div>
+</section>
+{% endblock %}

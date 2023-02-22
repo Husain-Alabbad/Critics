@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br>
+<div class="row">
+  <div class="col-md-3 offset-md-3"></div>
+  <div class="col-md-3 offset-md-3">
+    <button type="button" class="btn btn-secondary">
+      <a style="color: white" href="{% url 'stars_index' %}"
+        >go back to Star list</a
+      >
+    </button>
+  </div>
+</div>
+<h1 style="text-align: center">{{ stars.name }}</h1>
+
+<div class="container" data-aos="fade-up">
+  <div class="row">
+    <div id="flcon">
+      <div>
+        
+        
+        <p>Gender: {{ stars.get_gender_display }}</p>
+        <p>Nationality: {{ stars.get_nationality_display }}</p>
+        <p>Date of Birth: {{ stars.dob }}</p>
+        <p>Movies: {{ stars.movies }}</p>
+      </div>
+      <div>
+        {% load static %}
+        <img width="300px" height="300px" src={% static stars.image|cut:'main_app/static/' %}/>
+      </div>
+    </div>
+    <div class="card-action">
+      <a class="btn btn-primary" href="{% url 'stars_update' stars.id %}">Edit</a>
+      <a class="btn btn-primary" href="{% url 'stars_delete' stars.id %}">Delete</a> 
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div>
+      <h4>Have an opinion about this Star? Please review!</h4>
+      <form action="{% url 'add_review_star' stars.id '4' %}" method="post">
+        {% csrf_token %} {{ review_form.as_p }}
+        <input type="submit" value="Add Review" class="btn btn-primary" />
+      </form>
+
+      <br />
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Rating(out of 5)</th>
+            <th>Reviews</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for review in all_reviews %} 
+          {% if review.reference_id == stars.id and review.category_id == "4" %}
+          <tr>
+            <td>{{ review.rating }}</td>
+            <td>{{ review.review }}</td>
+          </tr>
+          {% endif %} {% endfor %}
+          <div class="pagination">
+            <span class="step-links">
+              {% if all_reviews.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ all_reviews.number }} of 
+                {{ all_reviews.paginator.num_pages }}.
+              </span>
+
+              {% if all_reviews.has_next %}
+              <a href="?page={{ all_reviews.next_page_number }}">next</a>
+              <a href="?page={{ all_reviews.paginator.num_pages }}"
+                >last &raquo;</a
+              >
+              {% endif %}
+            </span>
+          </div>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+  </div>
+</div>
+
+{% endblock %}
+
